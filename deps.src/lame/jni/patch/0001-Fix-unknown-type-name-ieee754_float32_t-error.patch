@@ -1,0 +1,24 @@
+From 94b480bedf4275025540e5629b0403e9b92b6fb5 Mon Sep 17 00:00:00 2001
+From: Xiaofeng Wei <xiaofeng.wei@nxp.com>
+Date: Mon, 23 Mar 2020 06:01:21 +0800
+Subject: [PATCH] Fix unknown type name 'ieee754_float32_t' error
+
+---
+ util.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/util.h b/util.h
+index 13f0cd4..1db5221 100644
+--- a/util.h
++++ b/util.h
+@@ -548,6 +548,7 @@ extern  "C" {
+     typedef struct lame_internal_flags lame_internal_flags;
+ #endif
+ 
++typedef float ieee754_float32_t;
+ 
+ /***********************************************************************
+ *
+-- 
+2.17.1
+

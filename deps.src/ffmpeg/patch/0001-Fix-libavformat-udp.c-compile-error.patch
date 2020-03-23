@@ -1,0 +1,38 @@
+From d08021746590b97591dfbbd27192effcf924f676 Mon Sep 17 00:00:00 2001
+From: Xiaofeng Wei <xiaofeng.wei@nxp.com>
+Date: Mon, 23 Mar 2020 06:55:24 +0800
+Subject: [PATCH] Fix 'libavformat/udp.c' compile error
+
+---
+ libavformat/udp.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/libavformat/udp.c b/libavformat/udp.c
+index cf73d33..b972cd3 100644
+--- a/libavformat/udp.c
++++ b/libavformat/udp.c
+@@ -287,12 +287,21 @@ static int udp_set_multicast_sources(URLContext *h,
+             return AVERROR(EINVAL);
+         }
+ 
++#ifdef ANDROID_OLD_NDK
++        mreqs.imr_multiaddr = ((struct sockaddr_in *)addr)->sin_addr.s_addr;
++        if (local_addr)
++            mreqs.imr_interface = ((struct sockaddr_in *)local_addr)->sin_addr.s_addr;
++        else
++            mreqs.imr_interface = INADDR_ANY;
++        mreqs.imr_sourceaddr = ((struct sockaddr_in *)&sources[i])->sin_addr.s_addr;
++#else
+         mreqs.imr_multiaddr.s_addr = ((struct sockaddr_in *)addr)->sin_addr.s_addr;
+         if (local_addr)
+             mreqs.imr_interface= ((struct sockaddr_in *)local_addr)->sin_addr;
+         else
+             mreqs.imr_interface.s_addr= INADDR_ANY;
+         mreqs.imr_sourceaddr.s_addr = ((struct sockaddr_in *)&sources[i])->sin_addr.s_addr;
++#endif
+ 
+         if (setsockopt(sockfd, IPPROTO_IP,
+                        include ? IP_ADD_SOURCE_MEMBERSHIP : IP_BLOCK_SOURCE,
+-- 
+2.17.1
+
