@@ -63,6 +63,17 @@ LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include/live555
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := libhidapi
+LOCAL_SRC_FILES := $(PREBUILT_PATH)/lib64/libhidapi.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := libSDL2
+LOCAL_SRC_FILES := $(PREBUILT_PATH)/lib64/libSDL2.so
+LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include/SDL2
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE := ga
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/core/include
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
@@ -118,8 +129,53 @@ LOCAL_CFLAGS += -DANDROID
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_CPP_EXTENSION := $(ga_cpp_extension)
 LOCAL_MODULE := ga-server-periodic
 LOCAL_SRC_FILES := server/periodic/ga-server-periodic.cpp
 LOCAL_SHARED_LIBRARIES := libavcodec ga
+include $(BUILD_EXECUTABLE)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := ga-hook-sdl2
+LOCAL_MODULE_FILENAME := ga-hook-sdl2
+LOCAL_SRC_FILES := \
+    server/event-posix/ga-hook-lib.cpp \
+    server/event-posix/elf_hook.c \
+    server/event-posix/ga-hook-common.cpp \
+    server/event-posix/ga-hook-sdl2.cpp \
+    server/event-posix/ctrl-sdl.cpp
+LOCAL_C_INCLUDES := $(wildcard server/event-posix/*.h)
+LOCAL_SHARED_LIBRARIES := ga libhidapi libSDL2
+LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -lGLESv3
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := ga-hook-sdl2audio
+LOCAL_MODULE_FILENAME := ga-hook-sdl2audio
+LOCAL_SRC_FILES := \
+    server/event-posix/ga-hook-lib.cpp \
+    server/event-posix/elf_hook.c \
+    server/event-posix/ga-hook-common.cpp \
+    server/event-posix/ga-hook-sdl2audio.cpp \
+LOCAL_C_INCLUDES := $(wildcard server/event-posix/*.h)
+LOCAL_SHARED_LIBRARIES := ga libhidapi libSDL2 libswresample libavutil
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := ga-hook-gl
+LOCAL_MODULE_FILENAME := ga-hook-gl
+LOCAL_SRC_FILES := \
+    server/event-posix/ga-hook-lib.cpp \
+    server/event-posix/elf_hook.c \
+    server/event-posix/ga-hook-common.cpp \
+    server/event-posix/ga-hook-gl.cpp
+LOCAL_C_INCLUDES := $(wildcard server/event-posix/*.h)
+LOCAL_SHARED_LIBRARIES := ga
+LOCAL_LDLIBS := -lGLESv3
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := ga-server-event-driven
+LOCAL_SRC_FILES := server/event-posix/ga-server-event-driven.cpp
+LOCAL_C_INCLUDES := $(wildcard server/event-posix/*.h)
+LOCAL_SHARED_LIBRARIES := ga
 include $(BUILD_EXECUTABLE)

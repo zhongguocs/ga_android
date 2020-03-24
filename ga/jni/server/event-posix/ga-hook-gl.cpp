@@ -76,7 +76,7 @@ gl_hook_symbols() {
 	void *handle = NULL;
 	char *ptr, soname[2048];
 	if((ptr = getenv("LIBVIDEO")) == NULL) {
-		strncpy(soname, "libGL.so.1", sizeof(soname));
+		strncpy(soname, "libGLESv3.so", sizeof(soname));
 	} else {
 		strncpy(soname, ptr, sizeof(soname));
 	}

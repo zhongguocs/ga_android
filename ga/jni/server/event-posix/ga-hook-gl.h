@@ -22,7 +22,7 @@
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
-#include <GLES3/gl32.h>
+#include <GLES3/gl3.h>
 #endif
 
 #ifdef __cplusplus

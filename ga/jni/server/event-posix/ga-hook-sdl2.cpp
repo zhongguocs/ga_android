@@ -42,7 +42,7 @@
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #else
-#include <GLES3/gl32.h>
+#include <GLES3/gl3.h>
 #endif
 
 #include <map>
@@ -114,7 +114,7 @@ sdl2_hook_symbols() {
 	void *handle = NULL;
 	char *ptr, soname[2048];
 	if((ptr = getenv("LIBSDL_SO")) == NULL) {
-		strncpy(soname, "libSDL-2.0.so.0", sizeof(soname));
+		strncpy(soname, "libSDL2.so", sizeof(soname));
 	} else if((ptr = ga_conf_readv("hook-sdl-path", soname, sizeof(soname))) != NULL) {
 		// use that from "hook-sdl-path" configuration
 		// do nothing
