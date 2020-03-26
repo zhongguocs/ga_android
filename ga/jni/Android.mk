@@ -74,6 +74,12 @@ LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include/SDL2
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := libasound
+LOCAL_SRC_FILES := $(PREBUILT_PATH)/lib64/libasound.so
+LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include/alsa
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE := ga
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/core/include
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
@@ -118,6 +124,16 @@ LOCAL_MODULE := encoder-audio
 LOCAL_SRC_FILES := module/encoder-audio/encoder-audio.cpp
 LOCAL_SHARED_LIBRARIES := libavcodec libavutil libswresample ga
 LOCAL_CFLAGS += -DANDROID
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := asource-system
+LOCAL_SRC_FILES := \
+    module/asource-system/asource-system.cpp \
+    module/asource-system/ga-alsa.cpp
+LOCAL_C_INCLUDES := $(wildcard module/asource-system/*.h)
+LOCAL_SHARED_LIBRARIES := libasound ga
+LOCAL_CFLAGS += -DANDROID -D_POSIX_C_SOURCE=2
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)

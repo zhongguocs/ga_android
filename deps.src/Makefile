@@ -1,7 +1,7 @@
 SDL2_VER := 2.0.12
 SDL2_TTF_VER := 2.0.15
 
-PACKAGES := sdl2 sdl2_ttf live555 ffmpeg
+PACKAGES := sdl2 sdl2_ttf live555 ffmpeg alsa
 
 all: $(PACKAGES)
 
@@ -62,3 +62,10 @@ ffmpeg: x264 lame
 	cp ffmpeg/ffmpeg-4.2.2/android/arm64-v8a/lib/*.so ../prebuilt/lib64
 	cp -rf ffmpeg/ffmpeg-4.2.2/android/arm64-v8a/include/* ../prebuilt/include
 	rm ffmpeg/ffmpeg-4.2.2.tar.bz2
+
+.PHONY: alsa
+alsa:
+	cd alsa/jni && ndk-build
+	cp alsa/libs/arm64-v8a/*.so ../prebuilt/lib64
+	mkdir -p ../prebuilt/include/alsa
+	cp -rf alsa/jni/include/* ../prebuilt/include/alsa
