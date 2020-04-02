@@ -74,7 +74,7 @@ ga_load_module(const char *modname, const char *prefix) {
 		return NULL;
 	}
 	if((do_module_load = (ga_module_t * (*)()) dlsym(handle, "module_load")) == NULL) {
-		ga_error("ga_load_module: [%s] is not a valid module.\n", fn);
+		ga_error("ga_load_module: [%s] is not a valid module. - %s.\n", fn, dlerror());
 		dlclose(handle);
 		return NULL;
 	}

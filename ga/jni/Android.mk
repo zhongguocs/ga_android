@@ -1,5 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
+#cmd-strip :=
+
 PREBUILT_PATH := $(LOCAL_PATH)/../../prebuilt
 
 include $(CLEAR_VARS)
@@ -84,12 +86,14 @@ LOCAL_MODULE := ga
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/core/include
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
 LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/core/*.cpp)
+LOCAL_CFLAGS += -DGA_MODULE
 LOCAL_SHARED_LIBRARIES := libmp3lame libavcodec libavdevice libavfilter libavformat libavutil libswresample libswscale libpostproc
 LOCAL_LDLIBS := -llog
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := encoder-video
+LOCAL_MODULE_FILENAME := encoder-video
 LOCAL_SRC_FILES := module/encoder-video/encoder-video.cpp
 LOCAL_C_INCLUDES := $(wildcard module/encoder-video/*.h)
 LOCAL_SHARED_LIBRARIES := libavcodec libavutil ga
@@ -97,14 +101,17 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := filter-rgb2yuv
+LOCAL_MODULE_FILENAME := filter-rgb2yuv
 LOCAL_SRC_FILES := module/filter-rgb2yuv/filter-rgb2yuv.cpp
 LOCAL_C_INCLUDES := $(wildcard module/filter-rgb2yuv/*.h)
 LOCAL_SHARED_LIBRARIES := libswscale ga
+#LOCAL_CFLAGS += -fvisibility=hidden
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_CPP_EXTENSION := $(ga_cpp_extension)
 LOCAL_MODULE := ctrl-sdl
+LOCAL_MODULE_FILENAME := ctrl-sdl
 LOCAL_SRC_FILES := module/ctrl-sdl/ctrl-sdl.cpp
 LOCAL_C_INCLUDES := $(wildcard module/ctrl-sdl/*.h)
 LOCAL_SHARED_LIBRARIES := ga
@@ -113,6 +120,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := vsource-desktop
+LOCAL_MODULE_FILENAME := vsource-desktop
 LOCAL_SRC_FILES := module/vsource-desktop/vsource-desktop.cpp
 LOCAL_C_INCLUDES := $(wildcard module/vsource-desktop/*.h)
 LOCAL_SHARED_LIBRARIES := ga
@@ -121,6 +129,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := encoder-audio
+LOCAL_MODULE_FILENAME := encoder-audio
 LOCAL_SRC_FILES := module/encoder-audio/encoder-audio.cpp
 LOCAL_SHARED_LIBRARIES := libavcodec libavutil libswresample ga
 LOCAL_CFLAGS += -DANDROID
@@ -128,6 +137,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := asource-system
+LOCAL_MODULE_FILENAME := asource-system
 LOCAL_SRC_FILES := \
     module/asource-system/asource-system.cpp \
     module/asource-system/ga-alsa.cpp
@@ -138,6 +148,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := server-live555
+LOCAL_MODULE_FILENAME := server-live555
 LOCAL_SRC_FILES := $(wildcard module/server-live555/*.cpp)
 LOCAL_C_INCLUDES := $(wildcard module/server-live555/*.h)
 LOCAL_SHARED_LIBRARIES := ga liblive555
@@ -171,7 +182,7 @@ LOCAL_SRC_FILES := \
     server/event-posix/ga-hook-lib.cpp \
     server/event-posix/elf_hook.c \
     server/event-posix/ga-hook-common.cpp \
-    server/event-posix/ga-hook-sdl2audio.cpp \
+    server/event-posix/ga-hook-sdl2audio.cpp
 LOCAL_C_INCLUDES := $(wildcard server/event-posix/*.h)
 LOCAL_SHARED_LIBRARIES := ga libhidapi libSDL2 libswresample libavutil
 include $(BUILD_SHARED_LIBRARY)

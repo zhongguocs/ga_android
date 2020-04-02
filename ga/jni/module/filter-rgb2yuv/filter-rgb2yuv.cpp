@@ -363,7 +363,7 @@ filter_RGB2YUV_stop(void *arg) {
 	return 0;
 }
 
-ga_module_t *
+MODULE MODULE_EXPORT ga_module_t *
 module_load() {
 	static ga_module_t m;
 	bzero(&m, sizeof(m));

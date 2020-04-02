@@ -87,7 +87,7 @@ live_server_send_packet(const char *prefix, int channelId, AVPacket *pkt, int64_
 	return 0;
 }
 
-ga_module_t *
+MODULE MODULE_EXPORT ga_module_t *
 module_load() {
 	static ga_module_t m;
 	//

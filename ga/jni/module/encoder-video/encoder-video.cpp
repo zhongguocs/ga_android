@@ -622,7 +622,7 @@ vencoder_ioctl(int command, int argsize, void *arg) {
 	return ret;
 }
 
-ga_module_t *
+MODULE MODULE_EXPORT ga_module_t *
 module_load() {
 	static ga_module_t m;
 	//struct RTSPConf *rtspconf = rtspconf_global();
