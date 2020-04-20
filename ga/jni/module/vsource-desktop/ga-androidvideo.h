@@ -2,19 +2,10 @@
 #define __XGA_ANDROIDVIDEO_H__
 
 #include "ga-common.h"
+#include "vsource.h"
+#include <Minicap.hpp>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-int ga_androidvideo_init(struct gaImage *image);
-void ga_androidvideo_capture(char *buf, int buflen);
-void ga_androidvideo_deinit();
-
-inline int ga_androidvideo_init(struct gaImage *image) {return 0;}
-inline void ga_androidvideo_capture(char *buf, int buflen){}
-inline void ga_androidvideo_deinit(){}
-#ifdef __cplusplus
-}
-#endif
-
+Minicap *ga_androidvideo_init();
+int ga_androidvideo_capture(Minicap *minicap, vsource_frame_t *vframe);
+void ga_androidvideo_deinit(Minicap *minicap);
 #endif

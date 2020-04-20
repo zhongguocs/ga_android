@@ -82,6 +82,12 @@ LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include/alsa
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := libminicap
+LOCAL_SRC_FILES := $(PREBUILT_PATH)/lib64/minicap.so
+LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE := ga
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/core/include
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
@@ -121,9 +127,11 @@ include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := vsource-desktop
 LOCAL_MODULE_FILENAME := vsource-desktop
-LOCAL_SRC_FILES := module/vsource-desktop/vsource-desktop.cpp
+LOCAL_SRC_FILES := \
+    module/vsource-desktop/vsource-desktop.cpp \
+    module/vsource-desktop/ga-androidvideo.cpp
 LOCAL_C_INCLUDES := $(wildcard module/vsource-desktop/*.h)
-LOCAL_SHARED_LIBRARIES := ga
+LOCAL_SHARED_LIBRARIES := ga libminicap
 LOCAL_CLAGS += -DANDROID
 include $(BUILD_SHARED_LIBRARY)
 

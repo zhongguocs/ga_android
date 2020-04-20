@@ -6,7 +6,7 @@ all: prebuilt GA
 prebuilt:
 	make -C deps.src
 GA:
-	cd ga/jni && ndk-build
+	cd ga/jni && ndk-build clean && ndk-build
 	mkdir -p output/bin/mod && mkdir -p output/lib64
 	cp ga/libs/arm64-v8a/lib*.so output/lib64
 	find ga/libs/arm64-v8a -type f -not -name "lib*.so" -exec cp {} output/bin/mod \;

@@ -76,6 +76,8 @@ static int vsource_reconfigured = 0;
 /* video source has to send images to video-# pipes */
 /* the format is defined in VIDEO_SOURCE_PIPEFORMAT */
 
+Minicap *minicap = NULL;
+
 /*
  * vsource_init(void *arg)
  * arg is a pointer to a gaRect (if cropping is enabled)
@@ -128,7 +130,7 @@ vsource_init(void *arg) {
 		return -1;
 	}
 #elif defined ANDROID
-	if(ga_androidvideo_init(image) < 0) {
+	if((minicap = ga_androidvideo_init()) == NULL) {
 		ga_error("Android capture init failed.\n");
 		return -1;
 	}
@@ -271,7 +273,7 @@ vsource_threadproc(void *arg) {
 #elif defined __APPLE__
 		ga_osx_capture((char*) frame->imgbuf, frame->imgbufsize, prect);
 #elif defined ANDROID
-		ga_androidvideo_capture((char*) frame->imgbuf, frame->imgbufsize);
+		ga_androidvideo_capture(minicap, frame);
 #else // X11
 		ga_xwin_capture((char*) frame->imgbuf, frame->imgbufsize, prect);
 #endif
@@ -329,7 +331,7 @@ vsource_deinit(void *arg) {
 #elif defined __APPLE__
 	ga_osx_deinit();
 #elif defined ANDROID
-	ga_androidvideo_deinit();
+	ga_androidvideo_deinit(minicap);
 #else
 	//ga_xwin_deinit(display, image);
 	ga_xwin_deinit();
