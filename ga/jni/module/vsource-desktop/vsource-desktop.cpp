@@ -76,7 +76,7 @@ static int vsource_reconfigured = 0;
 /* video source has to send images to video-# pipes */
 /* the format is defined in VIDEO_SOURCE_PIPEFORMAT */
 
-Minicap *minicap = NULL;
+static Minicap *minicap = NULL;
 
 /*
  * vsource_init(void *arg)
@@ -144,6 +144,12 @@ vsource_init(void *arg) {
 	screenwidth = image->width;
 	screenheight = image->height;
 
+	Minicap::DisplayInfo info;
+	if(minicap_try_get_display_info(0, &info)) {
+		ga_error("minicap_try_get_display_info failed\n");
+		return -1;
+	}
+
 #ifdef SOURCES
 	do {
 		int i;
@@ -151,9 +157,9 @@ vsource_init(void *arg) {
 		bzero(config, sizeof(config));
 		for(i = 0; i < SOURCES; i++) {
 			//config[i].rtp_id = i;
-			config[i].curr_width = prect ? prect->width : image->width;
-			config[i].curr_height = prect ? prect->height : image->height;
-			config[i].curr_stride = prect ? prect->linesize : image->bytes_per_line;
+			config[i].curr_width = info.width;
+			config[i].curr_height = info.height;
+			config[i].curr_stride = info.width << 2;
 		}
 		if(video_source_setup_ex(config, SOURCES) < 0) {
 			return -1;

@@ -132,7 +132,7 @@ LOCAL_SRC_FILES := \
     module/vsource-desktop/ga-androidvideo.cpp
 LOCAL_C_INCLUDES := $(wildcard module/vsource-desktop/*.h)
 LOCAL_SHARED_LIBRARIES := ga libminicap
-LOCAL_CLAGS += -DANDROID
+LOCAL_CFLAGS += -DANDROID
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -140,7 +140,6 @@ LOCAL_MODULE := encoder-audio
 LOCAL_MODULE_FILENAME := encoder-audio
 LOCAL_SRC_FILES := module/encoder-audio/encoder-audio.cpp
 LOCAL_SHARED_LIBRARIES := libavcodec libavutil libswresample ga
-LOCAL_CFLAGS += -DANDROID
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -151,7 +150,7 @@ LOCAL_SRC_FILES := \
     module/asource-system/ga-alsa.cpp
 LOCAL_C_INCLUDES := $(wildcard module/asource-system/*.h)
 LOCAL_SHARED_LIBRARIES := libasound ga
-LOCAL_CFLAGS += -DANDROID -D_POSIX_C_SOURCE=2
+LOCAL_CFLAGS += -D_POSIX_C_SOURCE=2
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -160,7 +159,6 @@ LOCAL_MODULE_FILENAME := server-live555
 LOCAL_SRC_FILES := $(wildcard module/server-live555/*.cpp)
 LOCAL_C_INCLUDES := $(wildcard module/server-live555/*.h)
 LOCAL_SHARED_LIBRARIES := ga liblive555
-LOCAL_CFLAGS += -DANDROID
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)

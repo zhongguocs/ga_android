@@ -125,10 +125,10 @@ static AVPixelFormat convertFormat(Minicap::Format format) {
     return AV_PIX_FMT_RGBA;
   case Minicap::FORMAT_RGBX_8888:
     return AV_PIX_FMT_RGB0;
+  case Minicap::FORMAT_BGRA_8888:
+    return AV_PIX_FMT_BGRA;
   case Minicap::FORMAT_RGB_888:
     return AV_PIX_FMT_RGB24;
-  case Minicap::FORMAT_BGRA_8888:
-    return AV_PIX_FMT_RGBA;
   default:
     //throw std::runtime_error("Unsupported pixel format");
     return AV_PIX_FMT_NONE;
