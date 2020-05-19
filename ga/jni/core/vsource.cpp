@@ -478,7 +478,7 @@ vsource_embed_colorcode(vsource_frame_t *frame, unsigned int value) {
 		return;
 	if(frame->pixelformat == AV_PIX_FMT_YUV420P) {
 		vsource_embed_yuv_code(frame, value);
-	} else if(frame->pixelformat == AV_PIX_FMT_RGBA) {
+	} else if(frame->pixelformat == AV_PIX_FMT_RGBA || frame->pixelformat == AV_PIX_FMT_RGB0) {
 		vsource_embed_rgba_code(frame, value, rgbacolor);
 	} else if(frame->pixelformat == AV_PIX_FMT_BGRA) {
 		vsource_embed_rgba_code(frame, value, bgracolor);

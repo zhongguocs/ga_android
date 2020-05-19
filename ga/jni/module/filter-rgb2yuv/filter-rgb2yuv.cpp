@@ -89,7 +89,13 @@ filter_RGB2YUV_init(void *arg) {
 		outputH = video_source_out_height(iid);
 		// create default converters
 		if(ga_conf_readv("filter-source-pixelformat", pixelfmt, sizeof(pixelfmt)) != NULL) {
-			if(strcasecmp("rgba", pixelfmt) == 0) {
+			if(strcasecmp("rgbx", pixelfmt) == 0) {
+				swsctx = create_frame_converter(
+						inputW, inputH, AV_PIX_FMT_RGB0,
+						outputW, outputH, AV_PIX_FMT_YUV420P);
+				ga_error("RGB2YUV filter: RGBX source specified.\n");
+				ga_error("RGB2YUV filter: inputW=%d, inputH=%d, outputW=%d, outputH=%d\n", inputW, inputH, outputW, outputH);
+			} else if(strcasecmp("rgba", pixelfmt) == 0) {
 				swsctx = create_frame_converter(
 						inputW, inputH, AV_PIX_FMT_RGBA,
 						outputW, outputH, AV_PIX_FMT_YUV420P);
@@ -113,7 +119,7 @@ filter_RGB2YUV_init(void *arg) {
 					outputW, outputH, AV_PIX_FMT_YUV420P);
 #else
 			swsctx = create_frame_converter(
-					inputW, inputH, AV_PIX_FMT_BGRA,
+					inputW, inputH, AV_PIX_FMT_RGB0,
 					outputW, outputH, AV_PIX_FMT_YUV420P);
 #endif
 		}
@@ -256,7 +262,7 @@ filter_RGB2YUV_threadproc(void *arg) {
 		}
 		//
 		if(srcframe->pixelformat == AV_PIX_FMT_RGBA
-		|| srcframe->pixelformat == AV_PIX_FMT_BGRA/*rgba*/) {
+		|| srcframe->pixelformat == AV_PIX_FMT_BGRA || srcframe->pixelformat == AV_PIX_FMT_RGB0/*rgba*/) {
 			src[0] = srcframe->imgbuf;
 			src[1] = NULL;
 			srcstride[0] = srcframe->realstride; //srcframe->stride;

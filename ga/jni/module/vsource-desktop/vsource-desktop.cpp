@@ -247,27 +247,7 @@ vsource_threadproc(void *arg) {
 		// copy image 
 		data = dpipe_get(pipe[0]);
 		frame = (vsource_frame_t*) data->pointer;
-#ifdef __APPLE__
-		frame->pixelformat = AV_PIX_FMT_RGBA;
-#else
-		frame->pixelformat = AV_PIX_FMT_BGRA;
-#endif
-		if(prect == NULL) {
-		////////////////////////////////////////
-		frame->realwidth = screenwidth;
-		frame->realheight = screenheight;
-		frame->realstride = screenwidth<<2;
-		frame->realsize = screenheight * frame->realstride;
-		////////////////////////////////////////
-		} else {
-		////////////////////////////////////////
-		frame->realwidth = prect->width;
-		frame->realheight = prect->height;
-		frame->realstride = prect->width<<2;
-		frame->realsize = prect->height * frame->realstride;
-		////////////////////////////////////////
-		}
-		frame->linesize[0] = frame->realstride/*frame->stride*/;
+
 #ifdef WIN32
 	#ifdef D3D_CAPTURE
 		ga_win32_D3D_capture((char*) frame->imgbuf, frame->imgbufsize, prect);

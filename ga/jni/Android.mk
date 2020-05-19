@@ -88,6 +88,20 @@ LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := libminicap-common
+LOCAL_SRC_FILES := $(PREBUILT_PATH)/lib64/libminicap-common.a
+LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := libjpeg-turbo
+LOCAL_SRC_FILES := $(PREBUILT_PATH)/lib64/libjpeg-turbo.a
+LOCAL_EXPORT_C_INCLUDES := $(PREBUILT_PATH)/include
+include $(PREBUILT_STATIC_LIBRARY)
+
+
+
+include $(CLEAR_VARS)
 LOCAL_MODULE := ga
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/core/include
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
@@ -129,9 +143,10 @@ LOCAL_MODULE := vsource-desktop
 LOCAL_MODULE_FILENAME := vsource-desktop
 LOCAL_SRC_FILES := \
     module/vsource-desktop/vsource-desktop.cpp \
-    module/vsource-desktop/ga-androidvideo.cpp
+    module/vsource-desktop/ga-androidvideo.cpp \
+    module/vsource-desktop/JpgEncoder.cpp
 LOCAL_C_INCLUDES := $(wildcard module/vsource-desktop/*.h)
-LOCAL_SHARED_LIBRARIES := ga libminicap
+LOCAL_SHARED_LIBRARIES := ga libminicap libminicap-common libjpeg-turbo
 LOCAL_CFLAGS += -DANDROID
 include $(BUILD_SHARED_LIBRARY)
 

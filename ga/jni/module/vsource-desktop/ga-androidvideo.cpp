@@ -3,10 +3,17 @@
 #include <chrono>
 #include <mutex>
 
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <Minicap.hpp>
 
+#include <string.h>
+#include <strings.h>
 //#include "ga-avcodec.h"
 #include "ga-androidvideo.h"
+
+#include "JpgEncoder.h"
 
 #define DEFAULT_DISPLAY_ID 0
 
@@ -135,6 +142,23 @@ static AVPixelFormat convertFormat(Minicap::Format format) {
   }
 }
 
+static int
+pumpf(int fd, unsigned char* data, size_t length) {
+  do {
+    int wrote = write(fd, data, length);
+
+    if (wrote < 0) {
+      return wrote;
+    }
+
+    data += wrote;
+    length -= wrote;
+  }
+  while (length > 0);
+
+  return 0;
+}
+
 int ga_androidvideo_capture(Minicap *minicap, vsource_frame_t *vframe)
 {
 	int err;
@@ -152,13 +176,50 @@ int ga_androidvideo_capture(Minicap *minicap, vsource_frame_t *vframe)
 
 	vframe->realwidth = frame.width;
 	vframe->realheight = frame.height;
-	vframe->realstride = frame.stride;
+	vframe->realstride = frame.width << 2;
 	vframe->realsize = frame.size;
 	vframe->linesize[0] = vframe->realstride;
 	vframe->pixelformat = convertFormat(frame.format);
 
+	//ga_error("%s:size=%d, frame.data=%p, imgbuf=%p\n", __func__, frame.size, frame.data, vframe->imgbuf);
 	bcopy(frame.data, vframe->imgbuf, frame.size);
+#if 0
+    static int capture_static = 0;
+    int fd1, fd2;
+    JpgEncoder encoder(4, 0);
 
+    if (!capture_static) {
+    JpgEncoder encoder(4, 0);
+    if (!encoder.reserveData(1920, 1080)) {
+      ga_error("Unable to reserve data for JPG encoder");
+    }
+
+    fd1 = open("/data/GA/capture.jpg", O_CREAT | O_RDWR, 0644);
+    if (fd1 < 0) {
+      ga_error("Unable to open file\n");
+    }
+    fd2 = open("/data/GA/capture.rgb", O_CREAT | O_RDWR, 0644);
+    if (fd2 < 0) {
+      ga_error("Unable to open file\n");
+    }
+
+    if (!encoder.encode(&frame, 80)) {
+      ga_error("Unable to encode frame\n");
+    }
+
+    if (pumpf(fd1, encoder.getEncodedData(), encoder.getEncodedSize()) < 0) {
+      ga_error("Unable to output encoded frame data\n");
+    }
+
+    if (pumpf(fd2, vframe->imgbuf, frame.size) < 0) {
+      ga_error("Unable to output encoded frame data\n");
+    }
+
+    capture_static++;
+    close(fd1);
+    close(fd2);
+    }
+#endif
 	minicap->releaseConsumedFrame(&frame);
 
 	return EXIT_SUCCESS;
