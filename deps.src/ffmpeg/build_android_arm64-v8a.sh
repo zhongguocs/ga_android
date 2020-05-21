@@ -1,6 +1,6 @@
 #!/bin/bash
 #Change NDK to your Android NDK location
-NDK=~/AOSP/NDK/android-ndk-r15c
+#NDK=~/AOSP/NDK/android-ndk-r15c
 PLATFORM=$NDK/platforms/android-24/arch-arm64/
 PREBUILT=$NDK/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64
 
