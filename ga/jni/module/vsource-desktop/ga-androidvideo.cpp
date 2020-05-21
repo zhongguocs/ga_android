@@ -152,7 +152,7 @@ int ga_androidvideo_capture(Minicap *minicap, vsource_frame_t *vframe)
 
 	vframe->realwidth = frame.width;
 	vframe->realheight = frame.height;
-	vframe->realstride = frame.stride;
+	vframe->realstride = frame.width << 2;
 	vframe->realsize = frame.size;
 	vframe->linesize[0] = vframe->realstride;
 	vframe->pixelformat = convertFormat(frame.format);
